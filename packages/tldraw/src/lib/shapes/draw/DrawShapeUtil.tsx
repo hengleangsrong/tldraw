@@ -32,8 +32,6 @@ import { getDrawShapeStrokeDashArray, getFreehandOptions, getPointsFromSegments 
 
 /** @public */
 export class DrawShapeUtil extends ShapeUtil<TLDrawShape> {
-	static override type = 'draw' as const
-
 	override hideResizeHandles = (shape: TLDrawShape) => getIsDot(shape)
 	override hideRotateHandle = (shape: TLDrawShape) => getIsDot(shape)
 	override hideSelectionBoundsBg = (shape: TLDrawShape) => getIsDot(shape)

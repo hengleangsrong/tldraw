@@ -11,8 +11,6 @@ import { HyperlinkButton } from '../shared/HyperlinkButton'
 
 /** @public */
 export class VideoShapeUtil extends BaseBoxShapeUtil<TLVideoShape> {
-	static override type = 'video' as const
-
 	override canEdit = () => true
 	override isAspectRatioLocked = () => true
 

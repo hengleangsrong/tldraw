@@ -143,7 +143,7 @@ export { computed }
 export function containBoxSize(originalSize: BoxWidthHeight, containBoxSize: BoxWidthHeight): BoxWidthHeight;
 
 // @public (undocumented)
-export const coreShapes: readonly [TLShapeInfo<TLGroupShape>, TLShapeInfo<TLImageShape>, TLShapeInfo<TLVideoShape>];
+export const coreShapes: readonly [TLShapeInfo<TLGroupShape, GroupShapeUtil>, TLShapeInfo<TLImageShape, ImageShapeUtil>, TLShapeInfo<TLVideoShape, VideoShapeUtil>];
 
 // @public (undocumented)
 export function correctSpacesToNbsp(input: string): string;
@@ -206,7 +206,12 @@ export const defaultTools: TLStateNodeConstructor[];
 export { defineMigrations }
 
 // @public (undocumented)
-export function defineShape<T extends TLUnknownShape>(type: T['type'], opts: Omit<TLShapeInfo<T>, 'type'>): TLShapeInfo<T>;
+export function defineShape<Util extends TLShapeUtilConstructor<any>>(type: ShapeFromUtilConstructor<Util>['type'], opts: {
+    util: Util;
+    props?: ShapeProps<ShapeFromUtilConstructor<Util>>;
+    migrations?: Migrations;
+    tool?: TLStateNodeConstructor;
+}): TLShapeInfo<ShapeFromUtilConstructor<Util>, Util>;
 
 // @internal (undocumented)
 export const DOUBLE_CLICK_DURATION = 450;
@@ -368,10 +373,11 @@ export class Editor extends EventEmitter<TLEventMap> {
     getShapesAtPoint(point: VecLike): TLShape[];
     // (undocumented)
     getShapeStyleIfExists<T>(shape: TLShape, style: StyleProp<T>): T | undefined;
+    getShapeUtil<Def extends AnyTLShapeInfo>(definition: Def): InstanceType<Def['util']>;
     getShapeUtil<S extends TLUnknownShape>(shape: S | TLShapePartial<S>): ShapeUtil<S>;
-    // (undocumented)
+    // @internal (undocumented)
     getShapeUtil<S extends TLUnknownShape>(type: S['type']): ShapeUtil<S>;
-    // (undocumented)
+    // @internal (undocumented)
     getShapeUtil<T extends ShapeUtil>(type: T extends ShapeUtil<infer R> ? R['type'] : string): T;
     getSortedChildIds(parentId: TLParentId): TLShapeId[];
     getStateDescendant(path: string): StateNode | undefined;
@@ -433,6 +439,8 @@ export class Editor extends EventEmitter<TLEventMap> {
     readonly isSafari: boolean;
     isSelected(id: TLShapeId): boolean;
     isShapeInPage(shape: TLShape, pageId?: TLPageId): boolean;
+    isShapeOfType<Shape extends TLUnknownShape>(shape: TLUnknownShape, definition: TLShapeInfo<Shape>): shape is Shape;
+    // @internal (undocumented)
     isShapeOfType<T extends TLUnknownShape>(shape: TLUnknownShape, type: T['type']): shape is T;
     isShapeOrAncestorLocked(shape?: TLShape): boolean;
     get isSnapMode(): boolean;
@@ -753,7 +761,7 @@ export const GRID_STEPS: {
 }[];
 
 // @public (undocumented)
-export const GroupShape: TLShapeInfo<TLGroupShape>;
+export const GroupShape: TLShapeInfo<TLGroupShape, typeof GroupShapeUtil>;
 
 // @public (undocumented)
 export class GroupShapeUtil extends ShapeUtil<TLGroupShape> {
@@ -777,10 +785,6 @@ export class GroupShapeUtil extends ShapeUtil<TLGroupShape> {
     indicator(shape: TLGroupShape): JSX.Element;
     // (undocumented)
     onChildrenChange: TLOnChildrenChangeHandler<TLGroupShape>;
-    // (undocumented)
-    static type: "group";
-    // (undocumented)
-    type: "group";
 }
 
 // @internal (undocumented)
@@ -804,7 +808,7 @@ export function HTMLContainer({ children, className, ...rest }: HTMLContainerPro
 export type HTMLContainerProps = React_3.HTMLAttributes<HTMLDivElement>;
 
 // @public (undocumented)
-export const ImageShape: TLShapeInfo<TLImageShape>;
+export const ImageShape: TLShapeInfo<TLImageShape, typeof ImageShapeUtil>;
 
 // @public (undocumented)
 export class ImageShapeUtil extends BaseBoxShapeUtil<TLImageShape> {
@@ -824,8 +828,6 @@ export class ImageShapeUtil extends BaseBoxShapeUtil<TLImageShape> {
     onDoubleClickEdge: TLOnDoubleClickHandler<TLImageShape>;
     // (undocumented)
     toSvg(shape: TLImageShape): Promise<SVGGElement>;
-    // (undocumented)
-    static type: "image";
 }
 
 // @public
@@ -1510,7 +1512,6 @@ export abstract class ShapeUtil<Shape extends TLUnknownShape = TLUnknownShape> {
     toSvg?(shape: Shape, ctx: SvgExportContext): Promise<SVGElement> | SVGElement;
     // (undocumented)
     readonly type: Shape['type'];
-    static type: string;
 }
 
 // @public
@@ -2127,10 +2128,10 @@ export interface TLSessionStateSnapshot {
 }
 
 // @public (undocumented)
-export type TLShapeInfo<T extends TLUnknownShape = TLUnknownShape> = {
-    type: T['type'];
-    util: TLShapeUtilConstructor<T>;
-    props?: ShapeProps<T>;
+export type TLShapeInfo<Shape extends TLUnknownShape = TLUnknownShape, Util extends TLShapeUtilConstructor<Shape> = TLShapeUtilConstructor<Shape>> = {
+    type: ShapeFromUtilConstructor<Util>['type'];
+    util: Util;
+    props?: ShapeProps<ShapeFromUtilConstructor<Util>>;
     migrations?: Migrations;
     tool?: TLStateNodeConstructor;
 };
@@ -2147,8 +2148,6 @@ export interface TLShapeUtilCanvasSvgDef {
 export interface TLShapeUtilConstructor<T extends TLUnknownShape, U extends ShapeUtil<T> = ShapeUtil<T>> {
     // (undocumented)
     new (editor: Editor, type: T['type'], styleProps: ReadonlyMap<StyleProp<unknown>, string>): U;
-    // (undocumented)
-    type: T['type'];
 }
 
 // @public (undocumented)
@@ -2287,7 +2286,7 @@ export function useTLStore(opts: TLStoreOptions): TLStore;
 export { useValue }
 
 // @public (undocumented)
-export const VideoShape: TLShapeInfo<TLVideoShape>;
+export const VideoShape: TLShapeInfo<TLVideoShape, typeof VideoShapeUtil>;
 
 // @public (undocumented)
 export class VideoShapeUtil extends BaseBoxShapeUtil<TLVideoShape> {
@@ -2303,8 +2302,6 @@ export class VideoShapeUtil extends BaseBoxShapeUtil<TLVideoShape> {
     isAspectRatioLocked: () => boolean;
     // (undocumented)
     toSvg(shape: TLVideoShape): SVGGElement;
-    // (undocumented)
-    static type: "video";
 }
 
 // @public (undocumented)

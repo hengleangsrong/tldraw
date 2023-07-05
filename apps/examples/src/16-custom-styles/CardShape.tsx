@@ -31,8 +31,6 @@ export type CardShape = TLBaseShape<
 >
 
 export class CardShapeUtil extends BaseBoxShapeUtil<CardShape> {
-	static override type = 'card' as const
-
 	override isAspectRatioLocked = (_shape: CardShape) => false
 	override canResize = (_shape: CardShape) => true
 	override canBind = (_shape: CardShape) => true

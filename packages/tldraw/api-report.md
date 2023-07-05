@@ -4,21 +4,51 @@
 
 ```ts
 
+import { BaseBoxShapeUtil } from '@tldraw/editor';
+import { Box2d } from '@tldraw/primitives';
+import { ComputedCache } from '@tldraw/store';
+import { JsonObject } from '@tldraw/utils';
+import { ShapeUtil } from '@tldraw/editor';
 import { TLArrowShape } from '@tldraw/tlschema';
+import { TLArrowShape as TLArrowShape_2 } from '@tldraw/editor';
 import { TLBookmarkShape } from '@tldraw/tlschema';
+import { TLBookmarkShape as TLBookmarkShape_2 } from '@tldraw/editor';
 import { TldrawEditorProps } from '@tldraw/editor';
 import { TLDrawShape } from '@tldraw/tlschema';
+import { TLDrawShape as TLDrawShape_2 } from '@tldraw/editor';
 import { TldrawUiProps } from '@tldraw/ui';
 import { TLFrameShape } from '@tldraw/tlschema';
+import { TLFrameShape as TLFrameShape_2 } from '@tldraw/editor';
 import { TLGeoShape } from '@tldraw/tlschema';
+import { TLGeoShape as TLGeoShape_2 } from '@tldraw/editor';
+import { TLHandle } from '@tldraw/editor';
 import { TLHighlightShape } from '@tldraw/tlschema';
+import { TLHighlightShape as TLHighlightShape_2 } from '@tldraw/editor';
 import { TLLineShape } from '@tldraw/tlschema';
+import { TLLineShape as TLLineShape_2 } from '@tldraw/editor';
 import { TLNoteShape } from '@tldraw/tlschema';
+import { TLNoteShape as TLNoteShape_2 } from '@tldraw/editor';
+import { TLOnBeforeCreateHandler } from '@tldraw/editor';
+import { TLOnBeforeUpdateHandler } from '@tldraw/editor';
+import { TLOnEditEndHandler } from '@tldraw/editor';
+import { TLOnHandleChangeHandler } from '@tldraw/editor';
+import { TLOnResizeEndHandler } from '@tldraw/editor';
+import { TLOnResizeHandler } from '@tldraw/editor';
+import { TLOnTranslateStartHandler } from '@tldraw/editor';
+import { TLParentId } from '@tldraw/editor';
+import { TLShape } from '@tldraw/editor';
+import { TLShapeId } from '@tldraw/editor';
 import { TLShapeInfo } from '@tldraw/editor';
+import { TLShapePartial } from '@tldraw/editor';
+import { TLShapeUtilCanvasSvgDef } from '@tldraw/editor';
+import { TLShapeUtilFlag } from '@tldraw/editor';
 import { TLTextShape } from '@tldraw/tlschema';
+import { TLTextShape as TLTextShape_2 } from '@tldraw/editor';
+import { Vec2d } from '@tldraw/primitives';
+import { VecLike } from '@tldraw/primitives';
 
 // @public (undocumented)
-export const defaultShapes: readonly [TLShapeInfo<TLTextShape>, TLShapeInfo<TLBookmarkShape>, TLShapeInfo<TLDrawShape>, TLShapeInfo<TLGeoShape>, TLShapeInfo<TLNoteShape>, TLShapeInfo<TLLineShape>, TLShapeInfo<TLFrameShape>, TLShapeInfo<TLArrowShape>, TLShapeInfo<TLHighlightShape>];
+export const defaultShapes: readonly [TLShapeInfo<TLTextShape, TextShapeUtil>, TLShapeInfo<TLBookmarkShape, BookmarkShapeUtil>, TLShapeInfo<TLDrawShape, DrawShapeUtil>, TLShapeInfo<TLGeoShape, GeoShapeUtil>, TLShapeInfo<TLNoteShape, NoteShapeUtil>, TLShapeInfo<TLLineShape, LineShapeUtil>, TLShapeInfo<TLFrameShape, FrameShapeUtil>, TLShapeInfo<TLArrowShape, ArrowShapeUtil>, TLShapeInfo<TLHighlightShape, HighlightShapeUtil>];
 
 // @public (undocumented)
 export function Tldraw(props: TldrawEditorProps & TldrawUiProps): JSX.Element;

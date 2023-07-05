@@ -81,7 +81,7 @@ import { EventEmitter } from 'eventemitter3'
 import { nanoid } from 'nanoid'
 import { TLUser, createTLUser } from '../config/createTLUser'
 import { checkShapesAndAddCore } from '../config/defaultShapes'
-import { AnyTLShapeInfo } from '../config/defineShape'
+import { AnyTLShapeInfo, TLShapeInfo } from '../config/defineShape'
 import {
 	ANIMATION_MEDIUM_MS,
 	CAMERA_MAX_RENDERING_INTERVAL,
@@ -212,9 +212,9 @@ export class Editor extends EventEmitter<TLEventMap> {
 		const shapeUtils = {} as Record<string, ShapeUtil>
 		const allStylesById = new Map<string, StyleProp<unknown>>()
 
-		for (const { util: Util, props } of allShapes) {
+		for (const { type, util: Util, props } of allShapes) {
 			const propKeysByStyle = getShapePropKeysByStyle(props ?? {})
-			shapeUtils[Util.type] = new Util(this, Util.type, propKeysByStyle)
+			shapeUtils[type] = new Util(this, type, propKeysByStyle)
 
 			for (const style of propKeysByStyle.keys()) {
 				if (!allStylesById.has(style.id)) {
@@ -589,14 +589,25 @@ export class Editor extends EventEmitter<TLEventMap> {
 	shapeUtils: { readonly [K in string]?: ShapeUtil<TLUnknownShape> }
 
 	/**
+	 * Get a shape util by its definition.
+	 *
+	 * @example
+	 * ```ts
+	 * editor.getShapeUtil(ArrowShape)
+	 * ```
+	 *
+	 * @param definition - The shape definition.
+	 *
+	 * @public
+	 */
+	getShapeUtil<Def extends AnyTLShapeInfo>(definition: Def): InstanceType<Def['util']>
+	/**
 	 * Get a shape util from a shape itself.
 	 *
 	 * @example
 	 * ```ts
 	 * const util = editor.getShapeUtil(myArrowShape)
-	 * const util = editor.getShapeUtil('arrow')
 	 * const util = editor.getShapeUtil<TLArrowShape>(myArrowShape)
-	 * const util = editor.getShapeUtil(TLArrowShape)('arrow')
 	 * ```
 	 *
 	 * @param shape - A shape, shape partial, or shape type.
@@ -604,7 +615,9 @@ export class Editor extends EventEmitter<TLEventMap> {
 	 * @public
 	 */
 	getShapeUtil<S extends TLUnknownShape>(shape: S | TLShapePartial<S>): ShapeUtil<S>
+	/** @internal */
 	getShapeUtil<S extends TLUnknownShape>(type: S['type']): ShapeUtil<S>
+	/** @internal */
 	getShapeUtil<T extends ShapeUtil>(type: T extends ShapeUtil<infer R> ? R['type'] : string): T
 	getShapeUtil(arg: string | { type: string }) {
 		const type = typeof arg === 'string' ? arg : arg.type
@@ -5197,11 +5210,11 @@ export class Editor extends EventEmitter<TLEventMap> {
 	}
 
 	/**
-	 * Get whether a shape matches the type of a TLShapeUtil.
+	 * Check whether a shape matches the type of a ShapeDefinition.
 	 *
 	 * @example
 	 * ```ts
-	 * const isArrowShape = isShapeOfType<TLArrowShape>(someShape, 'arrow')
+	 * const isArrowShape = editor.isShapeOfType(someShape, ArrowShape)
 	 * ```
 	 *
 	 * @param util - the TLShapeUtil constructor to test against
@@ -5209,7 +5222,14 @@ export class Editor extends EventEmitter<TLEventMap> {
 	 *
 	 * @public
 	 */
-	isShapeOfType<T extends TLUnknownShape>(shape: TLUnknownShape, type: T['type']): shape is T {
+	isShapeOfType<Shape extends TLUnknownShape>(
+		shape: TLUnknownShape,
+		definition: TLShapeInfo<Shape>
+	): shape is Shape
+	/** @internal */
+	isShapeOfType<T extends TLUnknownShape>(shape: TLUnknownShape, type: T['type']): shape is T
+	isShapeOfType(shape: TLUnknownShape, arg: string | { type: string }) {
+		const type = typeof arg === 'string' ? arg : arg.type
 		return shape.type === type
 	}
 

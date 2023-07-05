@@ -11,7 +11,6 @@ export interface TLShapeUtilConstructor<
 	U extends ShapeUtil<T> = ShapeUtil<T>
 > {
 	new (editor: Editor, type: T['type'], styleProps: ReadonlyMap<StyleProp<unknown>, string>): U
-	type: T['type']
 }
 
 /** @public */
@@ -46,13 +45,6 @@ export abstract class ShapeUtil<Shape extends TLUnknownShape = TLUnknownShape> {
 			},
 		}
 	}
-
-	/**
-	 * The type of the shape util, which should match the shape's type.
-	 *
-	 * @public
-	 */
-	static type: string
 
 	/**
 	 * Get the default props for a shape.

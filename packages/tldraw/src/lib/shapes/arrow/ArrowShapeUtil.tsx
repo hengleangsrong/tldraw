@@ -63,8 +63,6 @@ let globalRenderIndex = 0
 
 /** @public */
 export class ArrowShapeUtil extends ShapeUtil<TLArrowShape> {
-	static override type = 'arrow' as const
-
 	override canEdit = () => true
 	override canBind = () => false
 	override isClosed = () => false

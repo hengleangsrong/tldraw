@@ -14,8 +14,6 @@ import { ICardShape } from './card-shape-types'
 // indicator), and how it handles different events.
 
 export class CardShapeUtil extends ShapeUtil<ICardShape> {
-	static override type = 'card' as const
-
 	// Flags
 	override isAspectRatioLocked = (_shape: ICardShape) => false
 	override canResize = (_shape: ICardShape) => true

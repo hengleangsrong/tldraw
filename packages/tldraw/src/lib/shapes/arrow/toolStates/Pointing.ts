@@ -1,4 +1,5 @@
 import { StateNode, TLArrowShape, TLEventHandlers, createShapeId } from '@tldraw/editor'
+import { ArrowShape } from '../ArrowShape'
 
 export class Pointing extends StateNode {
 	static override id = 'pointing'
@@ -40,7 +41,7 @@ export class Pointing extends StateNode {
 			},
 		])
 
-		const util = this.editor.getShapeUtil<TLArrowShape>('arrow')
+		const util = this.editor.getShapeUtil(ArrowShape)
 		const shape = this.editor.getShapeById<TLArrowShape>(id)
 		if (!shape) return
 
@@ -87,7 +88,7 @@ export class Pointing extends StateNode {
 			}
 
 			if (!this.didTimeout) {
-				const util = this.editor.getShapeUtil<TLArrowShape>('arrow')
+				const util = this.editor.getShapeUtil(ArrowShape)
 				const shape = this.editor.getShapeById<TLArrowShape>(this.shape.id)
 
 				if (!shape) return

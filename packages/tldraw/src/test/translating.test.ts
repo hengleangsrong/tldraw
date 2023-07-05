@@ -18,8 +18,6 @@ import { getSnapLines } from './getSnapLines'
 type __TopLeftSnapOnlyShape = any
 
 class __TopLeftSnapOnlyShapeUtil extends ShapeUtil<__TopLeftSnapOnlyShape> {
-	static override type = '__test_top_left_snap_only' as const
-
 	getDefaultProps(): __TopLeftSnapOnlyShape['props'] {
 		return { width: 10, height: 10 }
 	}

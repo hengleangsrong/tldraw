@@ -6,10 +6,6 @@ import { DashedOutlineBox } from '../shared/DashedOutlineBox'
 
 /** @public */
 export class GroupShapeUtil extends ShapeUtil<TLGroupShape> {
-	static override type = 'group' as const
-
-	type = 'group' as const
-
 	hideSelectionBoundsBg = () => false
 	hideSelectionBoundsFg = () => true
 

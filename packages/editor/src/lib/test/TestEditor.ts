@@ -65,9 +65,6 @@ type GeoShape = TLBaseShape<
 >
 
 class GeoShapeUtil extends BaseBoxShapeUtil<GeoShape> {
-	static override type = 'geo' as const
-	type = 'geo' as const
-
 	getDefaultProps() {
 		return {
 			w: 100,
