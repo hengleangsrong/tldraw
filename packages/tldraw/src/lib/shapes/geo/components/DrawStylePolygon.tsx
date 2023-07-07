@@ -1,10 +1,10 @@
-import { getRoundedInkyPolygonPath, getRoundedPolygonPoints, VecLike } from '@tldraw/primitives'
-import { TLDefaultColorTheme, TLGeoShape } from '@tldraw/tlschema'
+import { TLDefaultColorTheme, TLGeoShape } from '@tldraw/editor'
+import { VecLike, getRoundedInkyPolygonPath, getRoundedPolygonPoints } from '@tldraw/primitives'
 import * as React from 'react'
 import {
+	ShapeFill,
 	getShapeFillSvg,
 	getSvgWithShapeFill,
-	ShapeFill,
 	useDefaultColorTheme,
 } from '../../shared/ShapeFill'
 
