@@ -1,4 +1,4 @@
-import { AssetRecordType, Editor, TLAsset, truncateStringWithEllipsis } from '@tldraw/editor'
+import { AssetRecordType, Editor, TLAsset, truncateStringWithEllipsis } from '@tldraw/tldraw'
 import { getHashForString } from '@tldraw/utils'
 import { rpc } from './rpc'
 
